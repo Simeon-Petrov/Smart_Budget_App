@@ -39,5 +39,33 @@ The output must be structured clearly under the headings:
 
 ---
 
+## PROMPT 2: BMAD Planning Phase - Detailed Technical Design
+
+**Date:** November 17, 2025
+
+**Objective:** Develop the BMAD Planning Phase for backend design, including REST API specifications and database schema.
+
+**Instructions:**
+
+Act as a Senior Backend Architect using the BMAD Planning Phase. Based on the Java/Spring Boot stack and the Core Data Model defined in the previous analysis (check README.md for context), provide detailed specifications for the backend.
+
+**Deliverables:**
+1. **RESTful API Endpoint Specification:** For the core CRUD operations (User, Category, Transaction). Specify the HTTP method, endpoint URL, and a brief description for each endpoint.
+2. **Database Schema Design (SQL DDL):** Generate the necessary PostgreSQL (or MySQL) SQL commands (CREATE TABLE) for the three main entities: `users`, `categories`, and `transactions`, including primary keys, foreign keys, and constraints (like NOT NULL or UNIQUE).
+
+**Format Requirements:**
+The output must be structured clearly under the headings: 
+1. RESTful API Endpoints
+2. Database Schema (SQL DDL)
+
+**Additional Context:**
+- Refer to the Core Data Model defined in PROMPT 1 (see README.md).
+- Include query parameters and examples for list endpoints (filtering by date range, type, etc.).
+- Provide comprehensive SQL DDL with constraints, indexes, and clear comments for junior developers.
+
+**Status:** ✅ Completed
+
+---
+
 ## Next Prompts (Coming Soon)
 To be documented as new prompts are provided...

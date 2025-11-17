@@ -261,3 +261,129 @@ transactionDate: 2025-11-17
 3. Frontend UI/UX wireframes
 4. Authentication & authorization flow
 5. Error handling and validation strategy
+
+---
+
+## BMAD Planning Phase - Backend Design (API + DB)
+
+### 1. RESTful API Endpoints
+
+Below are suggested REST endpoints for core CRUD operations and summaries. Keep endpoints simple and RESTful. Use JSON request/response bodies.
+
+- **Create User:** `POST /api/users`
+  - Description: Create a new user account.
+  - Request: `{ "username": "john", "email": "john@example.com", "password": "secret" }`
+  - Response: `201 Created` with created user DTO (without password).
+
+- **Get User:** `GET /api/users/{userId}`
+  - Description: Retrieve user profile (safe fields only).
+  - Response: `200 OK` with user DTO.
+
+- **Update User:** `PUT /api/users/{userId}`
+  - Description: Update user profile (email, username, etc.).
+  - Request: partial or full user DTO.
+
+- **Delete User:** `DELETE /api/users/{userId}`
+  - Description: Soft-delete or remove a user (consider soft-delete for audit).
+
+- **List Categories (by user):** `GET /api/users/{userId}/categories`
+  - Description: Returns categories for the user, includes defaults.
+
+- **Create Category:** `POST /api/users/{userId}/categories`
+  - Description: Add a new category for the user.
+  - Request: `{ "name": "Food", "type": "EXPENSE", "color": "#F39C12" }`
+
+- **Get Category:** `GET /api/categories/{categoryId}`
+
+- **Update Category:** `PUT /api/categories/{categoryId}`
+
+- **Delete Category:** `DELETE /api/categories/{categoryId}`
+  - Note: Prevent deletion if category is used in transactions or offer reassign option.
+
+- **List Transactions (by user):** `GET /api/users/{userId}/transactions`
+  - Description: Supports query parameters: `startDate`, `endDate`, `categoryId`, `type` (INCOME/EXPENSE), `page`, `size`.
+  - Example: `GET /api/users/1/transactions?startDate=2025-11-01&endDate=2025-11-30&type=EXPENSE`
+
+- **Create Transaction:** `POST /api/users/{userId}/transactions`
+  - Description: Add income or expense record.
+  - Request: `{ "amount": 25.50, "categoryId": 3, "type": "EXPENSE", "transactionDate": "2025-11-17", "notes": "Lunch" }`
+
+- **Get Transaction:** `GET /api/transactions/{transactionId}`
+
+- **Update Transaction:** `PUT /api/transactions/{transactionId}`
+
+- **Delete Transaction (soft):** `DELETE /api/transactions/{transactionId}`
+  - Description: Soft-delete and mark `is_deleted=true` so reports can exclude it but data remains.
+
+- **Summary / Aggregation:** `GET /api/users/{userId}/summary?startDate=&endDate=`
+  - Description: Returns `totalIncome`, `totalExpense`, `netBalance`, and `categoryBreakdown` within the period.
+
+- **Charts Data:** `GET /api/users/{userId}/charts?startDate=&endDate=&chart=pie|bar&mode=income|expense`
+  - Description: Returns datasets formatted for Chart.js or Recharts (labels + values).
+
+- **(Optional) AI Suggestions:** `GET /api/users/{userId}/suggestions?startDate=&endDate=`
+  - Description: Returns AI-generated recommendations (e.g., reduce dining out by X%). This can be implemented as a separate service calling a model.
+
+### 2. Database Schema (SQL DDL)
+
+Below are PostgreSQL-compatible CREATE TABLE statements for the three main entities. These prioritize clarity for junior developers and include primary keys, foreign keys, NOT NULL, UNIQUE, basic checks, and indexes.
+
+```sql
+-- Users table
+CREATE TABLE users (
+    id BIGSERIAL PRIMARY KEY,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
+);
+
+-- Categories table
+CREATE TABLE categories (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    type VARCHAR(10) NOT NULL CHECK (type IN ('INCOME','EXPENSE')),
+    color VARCHAR(7), -- hex color, e.g. #FF5733
+    description TEXT,
+    is_default BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+    UNIQUE (user_id, name)
+);
+
+-- Transactions table
+CREATE TABLE transactions (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    category_id BIGINT REFERENCES categories(id) ON DELETE SET NULL,
+    amount NUMERIC(14,2) NOT NULL CHECK (amount > 0),
+    type VARCHAR(10) NOT NULL CHECK (type IN ('INCOME','EXPENSE')),
+    description VARCHAR(255),
+    notes TEXT,
+    transaction_date DATE NOT NULL,
+    is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
+);
+
+-- Helpful indexes
+CREATE INDEX idx_transactions_user_date ON transactions(user_id, transaction_date);
+CREATE INDEX idx_categories_user ON categories(user_id);
+```
+
+Notes and recommendations:
+- Use `BIGSERIAL` for simple auto-increment integer IDs; for stronger uniqueness across services prefer `UUID`.
+- The `category_id` is nullable in `transactions` to allow deleting categories: prefer reassigning or soft-deleting categories instead of hard delete.
+- Keep amount as `NUMERIC(14,2)` to represent currency safely.
+- Maintain `updated_at` via application code or database triggers.
+- Add migration scripts (Flyway or Liquibase) for schema changes in real projects.
+
+---
+
+## Next Steps (Suggested)
+1. Create Spring Boot project skeleton with entities (`User`, `Category`, `Transaction`) annotated with JPA.
+2. Implement repository interfaces using Spring Data JPA.
+3. Implement DTOs and simple controllers for endpoints above.
+4. Add input validation (`@Valid`) and exception handlers.
+5. Add tests for repository and controller layers.
