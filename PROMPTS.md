@@ -119,6 +119,63 @@ src/main/java/com/smartbudget/
 
 ---
 
+## PROMPT 4: BMAD Solutioning Phase - Project Setup (Maven and Spring Boot)
+
+**Date:** November 17, 2025
+
+**Objective:** Set up the core Spring Boot project files (Maven `pom.xml`, main application class, and `application.properties`) for a Java 17+, Spring Boot 3.x, PostgreSQL project using base package `com.smartbudget`.
+
+**Instructions:**
+
+Act as an AI-First Developer setting up the core Spring Boot application. We are using Java 17+, Spring Boot 3.x, PostgreSQL, and the base package `com.smartbudget`.
+
+**Deliverables:**
+1. **`pom.xml`:** Full Maven configuration containing dependencies for Web, Data JPA, PostgreSQL driver, Lombok, Springdoc OpenAPI (Swagger), and testing.
+2. **`SmartBudgetApplication.java`:** Main Spring Boot application class in package `com.smartbudget`.
+3. **`application.properties`:** Configuration file with a local PostgreSQL connection (`postgres`/`password`, database `smartbudget_db`, port 5432) and JPA DDL generation enabled.
+
+**Format Requirements:**
+Structure the output with separate code blocks for `pom.xml`, `SmartBudgetApplication.java`, and `application.properties`.
+
+**Additional Context:**
+- These files should be added to the repository under their standard Maven locations.
+- Use Springdoc OpenAPI starter for automatic Swagger UI.
+
+**Status:** ✅ Completed
+
+---
+
+## PROMPT 5: BMAD Solutioning Phase - DTOs and Service Layer
+
+**Date:** November 17, 2025
+
+**Objective:** Continue BMAD Solutioning by creating DTOs and Service Layer for Transaction and Category.
+
+**Instructions:**
+
+Act as an AI-First Developer continuing the Solutioning Phase. The project uses Java/Spring Boot, the base package `com.smartbudget`, and the entities/repositories previously generated.
+
+**Constraints:**
+1. **Database:** PostgreSQL conventions (already applied to entities/repositories).
+2. **Base Package:** All new classes must be under `com.smartbudget`.
+
+**Deliverables:**
+1. **DTOs (with validation):**
+   - `TransactionDto.java`
+   - `CategoryDto.java`
+   - `SummaryDto.java`
+2. **Service layer (interfaces & implementations):**
+   - `TransactionService.java`, `TransactionServiceImpl.java`
+   - `CategoryService.java`, `CategoryServiceImpl.java`
+
+**Notes:**
+- DTO validation uses Jakarta Bean Validation annotations.
+- Services implement basic mapping between entities and DTOs, and throw `ResourceNotFoundException` when appropriate.
+
+**Status:** ✅ Completed
+
+---
+
 ## PROMPT 6: BMAD Solutioning Phase - REST Controllers
 
 **Date:** November 17, 2025
@@ -193,67 +250,47 @@ Act as an AI-First Developer executing the Testing Phase for the SmartBudget app
 
 ---
 
-## Next Prompts (Coming Soon)
-To be documented as new prompts are provided...
-
----
-
-## PROMPT 4: BMAD Solutioning Phase - Project Setup (Maven and Spring Boot)
+## PROMPT 8: BMAD Testing Phase - Service Layer Unit Tests
 
 **Date:** November 17, 2025
 
-**Objective:** Set up the core Spring Boot project files (Maven `pom.xml`, main application class, and `application.properties`) for a Java 17+, Spring Boot 3.x, PostgreSQL project using base package `com.smartbudget`.
+**Objective:** Develop unit tests for the business logic layer (Service layer) using JUnit 5 and Mockito.
 
 **Instructions:**
 
-Act as an AI-First Developer setting up the core Spring Boot application. We are using Java 17+, Spring Boot 3.x, PostgreSQL, and the base package `com.smartbudget`.
-
-**Deliverables:**
-1. **`pom.xml`:** Full Maven configuration containing dependencies for Web, Data JPA, PostgreSQL driver, Lombok, Springdoc OpenAPI (Swagger), and testing.
-2. **`SmartBudgetApplication.java`:** Main Spring Boot application class in package `com.smartbudget`.
-3. **`application.properties`:** Configuration file with a local PostgreSQL connection (`postgres`/`password`, database `smartbudget_db`, port 5432) and JPA DDL generation enabled.
-
-**Format Requirements:**
-Structure the output with separate code blocks for `pom.xml`, `SmartBudgetApplication.java`, and `application.properties`.
-
-**Additional Context:**
-- These files should be added to the repository under their standard Maven locations.
-- Use Springdoc OpenAPI starter for automatic Swagger UI.
-
-**Status:** ✅ Completed
-
----
-
----
-
-## PROMPT 5: BMAD Solutioning Phase - DTOs and Service Layer
-
-**Date:** November 17, 2025
-
-**Objective:** Continue BMAD Solutioning by creating DTOs and Service Layer for Transaction and Category.
-
-**Instructions:**
-
-Act as an AI-First Developer continuing the Solutioning Phase. The project uses Java/Spring Boot, the base package `com.smartbudget`, and the entities/repositories previously generated.
+Act as an AI-First Developer completing the Testing Phase. We will now focus on the business logic layer using standard JUnit 5 and Mockito.
 
 **Constraints:**
-1. **Database:** PostgreSQL conventions (already applied to entities/repositories).
-2. **Base Package:** All new classes must be under `com.smartbudget`.
+1. Target `TransactionServiceImpl` class for testing.
+2. Use `@InjectMocks` to inject the implementation class under test.
+3. Mock `TransactionRepository`, `UserRepository`, and `CategoryRepository` using `@Mock`.
+4. Use `@ExtendWith(MockitoExtension.class)` for Mockito initialization.
 
 **Deliverables:**
-1. **DTOs (with validation):**
-   - `TransactionDto.java`
-   - `CategoryDto.java`
-   - `SummaryDto.java`
-2. **Service layer (interfaces & implementations):**
-   - `TransactionService.java`, `TransactionServiceImpl.java`
-   - `CategoryService.java`, `CategoryServiceImpl.java`
+1. **`TransactionServiceImplTest.java`** – Unit test class with the following test methods:
+   - `testSaveTransaction_success` – Verify save() maps DTO to Entity and calls repository.save()
+   - `testSaveTransaction_userNotFound` – Verify exception when user doesn't exist
+   - `testSaveTransaction_categoryNotFound` – Verify exception when category doesn't exist
+   - `testFindById_success` – Verify findById() returns correct DTO
+   - `testFindById_notFound` – Verify exception when transaction doesn't exist
+   - `testCalculateSummary_returnsCorrectTotals` – Test summary aggregation with income/expense totals and category breakdown
+   - `testDeleteTransaction_success` – Verify delete() soft-deletes (marks is_deleted=true)
+   - `testDeleteTransaction_notFound` – Verify exception when transaction doesn't exist
+   - `testFindAllByUserId_success` – Verify findAllByUserId() returns list of DTOs
 
-**Notes:**
-- DTO validation uses Jakarta Bean Validation annotations.
-- Services implement basic mapping between entities and DTOs, and throw `ResourceNotFoundException` when appropriate.
+**Key Practices:**
+- Use `@BeforeEach` for test data setup (entities, DTOs).
+- Mock repository methods using `when()` and `thenReturn()`.
+- Assert on results using `assertEquals()`, `assertNotNull()`, `assertThrows()`.
+- Verify repository interactions using `verify()` and check call counts.
+- Test both success and failure scenarios (exceptions).
 
 **Status:** ✅ Completed
+
+---
+
+## Next Prompts (Coming Soon)
+To be documented as new prompts are provided...
 
 
 
