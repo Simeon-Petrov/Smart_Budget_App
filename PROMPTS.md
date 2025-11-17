@@ -156,6 +156,43 @@ Act as an AI-First Developer creating the final backend layer. The project uses 
 
 ---
 
+## PROMPT 7: BMAD Testing Phase - Controller Integration Tests
+
+**Date:** November 17, 2025
+
+**Objective:** Develop integration tests for the REST Controller layer using JUnit 5 and Mockito.
+
+**Instructions:**
+
+Act as an AI-First Developer executing the Testing Phase for the SmartBudget application. We will use JUnit 5 and Mockito for integration testing.
+
+**Constraints:**
+1. Use `@WebMvcTest` annotation targeting `TransactionController`.
+2. Mock `TransactionService` using `@MockBean`.
+3. Use `MockMvc` to perform API calls (GET, POST, PUT, DELETE).
+4. Properly serialize/deserialize JSON using `ObjectMapper`.
+
+**Deliverables:**
+1. **`TransactionControllerIntegrationTest.java`** – Test class with the following test methods:
+   - `testCreateTransaction_success` – POST request with valid `TransactionDto` → HTTP 201 Created
+   - `testGetTransaction_success` – GET by ID → HTTP 200 OK
+   - `testGetTransaction_notFound` – GET non-existent ID → HTTP 404
+   - `testGetTransactionSummary_success` – GET summary with aggregated results → HTTP 200 OK with totals and breakdown
+   - `testUpdateTransaction_success` – PUT request → HTTP 200 OK
+   - `testDeleteTransaction_success` – DELETE request → HTTP 204 No Content
+   - `testCreateTransaction_invalidData` – POST with missing required field → HTTP 400 Bad Request
+   - `testCreateTransaction_negativeAmount` – POST with negative amount → HTTP 400 Bad Request
+
+**Key Practices:**
+- Use `@BeforeEach` to set up mock data.
+- Use `mockMvc.perform()` to simulate HTTP requests.
+- Assert HTTP status codes and response JSON content using `jsonPath()`.
+- Mock service methods using `when()`, `doNothing()`, etc.
+
+**Status:** ✅ Completed
+
+---
+
 ## Next Prompts (Coming Soon)
 To be documented as new prompts are provided...
 
