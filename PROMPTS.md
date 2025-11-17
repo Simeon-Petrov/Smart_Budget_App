@@ -121,3 +121,34 @@ src/main/java/com/smartbudget/
 
 ## Next Prompts (Coming Soon)
 To be documented as new prompts are provided...
+
+---
+
+## PROMPT 4: BMAD Solutioning Phase - Project Setup (Maven and Spring Boot)
+
+**Date:** November 17, 2025
+
+**Objective:** Set up the core Spring Boot project files (Maven `pom.xml`, main application class, and `application.properties`) for a Java 17+, Spring Boot 3.x, PostgreSQL project using base package `com.smartbudget`.
+
+**Instructions:**
+
+Act as an AI-First Developer setting up the core Spring Boot application. We are using Java 17+, Spring Boot 3.x, PostgreSQL, and the base package `com.smartbudget`.
+
+**Deliverables:**
+1. **`pom.xml`:** Full Maven configuration containing dependencies for Web, Data JPA, PostgreSQL driver, Lombok, Springdoc OpenAPI (Swagger), and testing.
+2. **`SmartBudgetApplication.java`:** Main Spring Boot application class in package `com.smartbudget`.
+3. **`application.properties`:** Configuration file with a local PostgreSQL connection (`postgres`/`password`, database `smartbudget_db`, port 5432) and JPA DDL generation enabled.
+
+**Format Requirements:**
+Structure the output with separate code blocks for `pom.xml`, `SmartBudgetApplication.java`, and `application.properties`.
+
+**Additional Context:**
+- These files should be added to the repository under their standard Maven locations.
+- Use Springdoc OpenAPI starter for automatic Swagger UI.
+
+**Status:** ✅ Completed
+
+---
+
+## Next Prompts (Coming Soon)
+To be documented as new prompts are provided...
