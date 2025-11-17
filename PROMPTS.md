@@ -119,6 +119,43 @@ src/main/java/com/smartbudget/
 
 ---
 
+## PROMPT 6: BMAD Solutioning Phase - REST Controllers
+
+**Date:** November 17, 2025
+
+**Objective:** Create REST controller classes for Transaction and Category endpoints.
+
+**Instructions:**
+
+Act as an AI-First Developer creating the final backend layer. The project uses Spring Boot, the base package `com.smartbudget`, and the services/DTOs generated in PROMPT 5.
+
+**Constraints:**
+1. Controllers must be in the package `com.smartbudget.controller`.
+2. Use the generated Service layer interfaces (e.g., `TransactionService`, `CategoryService`).
+3. Handle request bodies using the generated DTOs.
+4. Use `@Validated` and standard Spring REST annotations (`@RestController`, `@RequestMapping`, etc.).
+
+**Deliverables:**
+1. **`TransactionController.java`** – CRUD endpoints + advanced operations:
+   - `POST /api/transactions` – Create transaction
+   - `GET /api/transactions/{id}` – Get by ID
+   - `GET /api/transactions` – List all for user
+   - `GET /api/transactions/range` – Filter by date range
+   - `GET /api/transactions/summary` – Aggregated summary
+   - `PUT /api/transactions/{id}` – Update transaction
+   - `DELETE /api/transactions/{id}` – Delete (soft-delete)
+
+2. **`CategoryController.java`** – CRUD endpoints:
+   - `POST /api/categories` – Create category
+   - `GET /api/categories/{id}` – Get by ID
+   - `GET /api/categories` – List by user
+   - `PUT /api/categories/{id}` – Update category
+   - `DELETE /api/categories/{id}` – Delete category
+
+**Status:** ✅ Completed
+
+---
+
 ## Next Prompts (Coming Soon)
 To be documented as new prompts are provided...
 
@@ -150,5 +187,38 @@ Structure the output with separate code blocks for `pom.xml`, `SmartBudgetApplic
 
 ---
 
-## Next Prompts (Coming Soon)
-To be documented as new prompts are provided...
+---
+
+## PROMPT 5: BMAD Solutioning Phase - DTOs and Service Layer
+
+**Date:** November 17, 2025
+
+**Objective:** Continue BMAD Solutioning by creating DTOs and Service Layer for Transaction and Category.
+
+**Instructions:**
+
+Act as an AI-First Developer continuing the Solutioning Phase. The project uses Java/Spring Boot, the base package `com.smartbudget`, and the entities/repositories previously generated.
+
+**Constraints:**
+1. **Database:** PostgreSQL conventions (already applied to entities/repositories).
+2. **Base Package:** All new classes must be under `com.smartbudget`.
+
+**Deliverables:**
+1. **DTOs (with validation):**
+   - `TransactionDto.java`
+   - `CategoryDto.java`
+   - `SummaryDto.java`
+2. **Service layer (interfaces & implementations):**
+   - `TransactionService.java`, `TransactionServiceImpl.java`
+   - `CategoryService.java`, `CategoryServiceImpl.java`
+
+**Notes:**
+- DTO validation uses Jakarta Bean Validation annotations.
+- Services implement basic mapping between entities and DTOs, and throw `ResourceNotFoundException` when appropriate.
+
+**Status:** ✅ Completed
+
+
+
+
+
