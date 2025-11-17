@@ -67,5 +67,57 @@ The output must be structured clearly under the headings:
 
 ---
 
+## PROMPT 3: BMAD Solutioning Phase - Backend Entities and Repositories (PostgreSQL Focus)
+
+**Date:** November 17, 2025
+
+**Objective:** Execute the BMAD Solutioning Phase by generating Java entity classes and Spring Data JPA repositories.
+
+**Instructions:**
+
+Act as an AI-First Developer executing the BMAD Solutioning Phase. The project uses Java 17+ with Spring Boot 3.x and Spring Data JPA.
+
+**Constraints:**
+1. **Database:** Exclusively use PostgreSQL data types and conventions where applicable.
+2. **Base Package:** All classes must be under the package `com.smartbudget`.
+
+**Deliverables:**
+1. **JPA Entity Classes:**
+   - `User.java`
+   - `Category.java`
+   - `Transaction.java`
+   - Use Lombok annotations (`@Data`, `@NoArgsConstructor`, `@AllArgsConstructor`) for brevity.
+   - Ensure correct JPA annotations (`@Entity`, `@Table`, `@Id`, `@GeneratedValue`, `@OneToMany`, `@ManyToOne`, `@Enumerated`, etc.).
+   - Implement the relationships (e.g., User to Transactions) and use the `BIGSERIAL` equivalent (Long/long and appropriate JPA strategy).
+
+2. **Spring Data JPA Repository Interfaces:**
+   - `UserRepository.java` (extends JpaRepository)
+   - `CategoryRepository.java` (extends JpaRepository)
+   - `TransactionRepository.java` (extends JpaRepository)
+   - Include custom query methods for filtering, aggregation, and business logic (e.g., find by date range, sum income/expenses).
+
+**Additional Context:**
+- Refer to the SQL DDL schema from PROMPT 2 for table structure and constraints.
+- Include proper javadoc comments for clarity.
+- Use Jakarta Persistence annotations (new standard) instead of older javax.persistence.
+
+**File Structure:**
+```
+src/main/java/com/smartbudget/
+├── entity/
+│   ├── User.java
+│   ├── Category.java
+│   ├── Transaction.java
+│   └── TransactionType.java (Enum)
+└── repository/
+    ├── UserRepository.java
+    ├── CategoryRepository.java
+    └── TransactionRepository.java
+```
+
+**Status:** ✅ Completed
+
+---
+
 ## Next Prompts (Coming Soon)
 To be documented as new prompts are provided...
